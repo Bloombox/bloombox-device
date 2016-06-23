@@ -1,27 +1,231 @@
+
+<!--
+`<bloombox-device>` shows current Bloombox device status.
+
+@group Bloombox Elements
+@element bloombox-device
+@demo demo/index.html
+@homepage bloombox.github.io
+-->
+
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="../iron-label/iron-label.html">
+<link rel="import" href="../paper-card/paper-card.html">
+<link rel="import" href="../bloombox-styles/bloombox-styles.html">
+
 
 <dom-module id="bloombox-device">
   <template>
-    <style>
+    <style is="custom-style" include="bloombox-styles">
       :host {
         display: block;
       }
+
+      paper-card.device-card {
+        min-width: 650px;
+      }
+
+      paper-card.device-card {
+        background-color: white;
+      }
+
+      paper-card.device-card .card-content {
+        display: flex;
+        background-color: #efefef;
+      }
+
+      paper-card.device-card .device-image {
+        max-width: 300px;
+        overflow: hidden;
+      }
+
+      paper-card.device-card .device-image img {
+        max-width: 100%;
+      }
+
+      paper-card.device-card .device-info-column ul li {
+        list-style: none;
+      }
+
+      paper-card.device-card .device-info-column ul li b {
+        color: #333;
+      }
+
+      paper-card.device-card span.device-data-value {
+        margin-left: 5px;
+      }
+
+      paper-card.device-card .device-status-indicator {
+        margin-top: 20px;
+        padding-left: 40px;
+        font-size: 120%;
+      }
+
+      paper-card.device-card .device-status-label:before {
+        content: '';
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 10px;
+        background-color: #111;
+        margin-right: 5px;
+      }
+
+      paper-card.device-card span.device-status-label-online:before {
+        background-color: green;
+      }
+
+      paper-card.device-card span.device-status-label-offline:before {
+        background-color: #888;
+      }
     </style>
-    <h2>Hello [[prop1]]</h2>
+    
+    <paper-card heading="[[label]]" class="device-card">
+      <div class="card-content">
+        <div class="device-image-column">
+          <div class="device-image">
+            <img src="[[_img]]" />
+          </div><!-- end div.device-image -->
+        </div><!-- end div.device-image-column -->
+
+        <div class="device-info-column">
+          <div class="device-status-indicator">
+            <template is="dom-if" if="[[online]]">
+              <span class="device-status-label device-status-label-online">Online</span>
+            </template>
+            <template is="dom-if" if="[[!online]]">
+              <span class="device-status-label device-status-label-offline">Offline</span>
+            </template>
+          </div><!-- end div.device-status-indicator -->
+          <ul>
+            <li><b>Name:</b><span class="device-data-value">[[name]]</span></li>
+            <li><b>Type:</b><span class="device-data-value">[[_labelFormat(type)]]</span></li>
+            <li><b>Software:</b><span class="device-data-value">v[[softwareVersion]]</span></li>
+            <li><b>Hardware:</b><span class="device-data-value">[[hardwareVersion]]</span></li>
+          </ul>
+        </div><!-- end div.device-info -->
+      </div>
+    </paper-card><!-- end .paper-card.device-card -->
   </template>
 
   <script>
-    Polymer({
+    var BloomboxDeviceConfig = {
+      base: "https://storage.googleapis.com/bloombox-device/v1/"
+    };
 
+    Polymer.BloomboxDevice = Polymer({
       is: 'bloombox-device',
 
       properties: {
-        prop1: {
+        /**
+         * Private computed property that provides the current image to display
+         * for the selected device.
+         */
+        _img: {
           type: String,
-          value: 'bloombox-device',
+          notify: true,
+          computed: '_computeImage(online, partner)'
         },
+
+        /**
+         * Assigned device `name`, which is the partner key, concatenated with the
+         * device serial number, and separated by a hyphen.
+         */
+        name: {
+          type: String,
+          notify: true
+        },
+
+        /**
+         * Device `label`, which is set upon assignment to a partner location. This
+         * label is designed to be human-readable and identifies a station uniquely
+         * for a given `partner` and `location`.
+         */
+        label: {
+          type: String,
+          notify: true
+        },
+
+        /**
+         * Device type. For the time being, this is always `MENU`.
+         */
+        type: {
+          type: String,
+          notify: true
+        },
+
+        /**
+         * Device visibility. For the time being, this is always `PRIVATE`,
+         * meaning the device is for use by one patient/end-user at a time.
+         */
+        visibility: {
+          type: String,
+          notify: true
+        },
+
+        /**
+         * App version on the device. Reported by the device upon application boot.
+         */
+        softwareVersion: {
+          type: String,
+          notify: true
+        },
+
+        /**
+         * Hardware version of the device. Currently always `V1.R1`.
+         */
+        hardwareVersion: {
+          type: String,
+          notify: true,
+          value: "V1.R1"
+        },
+
+        /**
+         * Boolean flag indicating whether this device is online. Devices
+         * check in periodically and automatically mark themselves as offline
+         * in the event of a crash or a connection failure.
+         *
+         * Note: This is kept as type `Object` to force deserialization with
+         * `JSON.parse`.
+         */
+        online: {
+          type: Object,
+          notify: true,
+          default: false
+        },
+
+        /**
+         * Short string uniquely identifying the currently-active partner.
+         */
+        partner: {
+          type: String,
+          notify: true,
+          default: "mm"
+        }
       },
 
+      /**
+       * Compute function that backs the property `_img` and calculates an
+       * accurate picture to show representing the current device status.
+       */
+      _computeImage: function(online, partner) {
+        // @TODO: don't just put abatin in here
+        if (online === true) {
+          return BloomboxDeviceConfig.base + "assets/images/device-static-" + partner + "-midres.png";
+        }
+        return BloomboxDeviceConfig.base + "assets/images/device-static-offline-midres.png";
+      },
+
+      /**
+       * Render a string value as a pleasant, human-readable value.
+       */
+      _labelFormat: function(value) {
+        if (value !== undefined && value !== null)
+          return value.charAt(0).toUpperCase() + value.substr(1).toLowerCase();
+        return value;
+      }
     });
   </script>
 </dom-module>
