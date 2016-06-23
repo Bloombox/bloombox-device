@@ -3,7 +3,12 @@
   "description": "Shows current Bloombox device status",
   "main": "bloombox-device.html",
   "dependencies": {
-    "polymer": "Polymer/polymer#^1.5.0"
+    "polymer": "Polymer/polymer#^1.5.0",
+    "bloombox-styles": "git@github.com:bloombox/bloombox-styles.git#master",
+    "iron-icon": "PolymerElements/iron-icon#^1.0.8",
+    "iron-icons": "PolymerElements/iron-icons#^1.1.3",
+    "iron-label": "PolymerElements/iron-label#^1.0.2",
+    "paper-card": "PolymerElements/paper-card#^1.1.1"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
