@@ -12,18 +12,47 @@
     <link rel="import" href="../bloombox-device.html">
 
     <style is="custom-style" include="demo-pages-shared-styles">
+      .centered-demo {
+        --demo-snippet-demo: {
+          background-color: #eee;
+        };
+      }
+
+      .vertical-section-container.centered {
+        max-width: 700px !important;
+      }
     </style>
   </head>
-  <body>
-
+  <body unresolved>
     <div class="vertical-section-container centered">
-      <h3>Basic bloombox-device Demo</h3>
-      <demo-snippet>
+      <h3>Online device example</h3>
+      <demo-snippet class="dashboard-example">
         <template>
-          <bloombox-device></bloombox-device>
+          <bloombox-device
+            name="SANDBOX-1234"
+            label="Sandbox Device #1"
+            type="MENU"
+            visibility="PRIVATE"
+            partner="abatin"
+            online="true"
+            software-version="1.9"></bloombox-device>
         </template>
       </demo-snippet>
     </div>
-
+    <div class="vertical-section-container centered">
+      <h3>Offline device example</h3>
+      <demo-snippet class="dashboard-example">
+        <template>
+          <bloombox-device
+            name="SANDBOX-1234"
+            label="Sandbox Device #2"
+            type="MENU"
+            visibility="PRIVATE"
+            partner="abatin"
+            online="false"
+            software-version="1.9"></bloombox-device>
+        </template>
+      </demo-snippet>
+    </div>
   </body>
 </html>
