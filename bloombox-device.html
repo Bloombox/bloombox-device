@@ -42,7 +42,8 @@
       }
 
       paper-card.device-card .device-image img {
-        max-width: 100%;
+        max-width: 80%;
+        padding: 3%;
       }
 
       paper-card.device-card .device-info-column ul li {
@@ -82,7 +83,7 @@
       }
     </style>
     
-    <paper-card heading="[[label]]" class="device-card">
+    <paper-card heading="[[_cardLabel()]]" class="device-card">
       <div class="card-content">
         <div class="device-image-column">
           <div class="device-image">
@@ -225,6 +226,13 @@
         if (value !== undefined && value !== null)
           return value.charAt(0).toUpperCase() + value.substr(1).toLowerCase();
         return value;
+      },
+
+      /**
+       * Render default device `label` if we don't have an explicit one.
+       */
+      _cardLabel: function() {
+        return this.label || this.name;
       }
     });
   </script>
