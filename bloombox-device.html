@@ -23,35 +23,37 @@
         display: block;
       }
 
-      paper-card.device-card {
-        background-color: white;
-      }
-
       paper-card.device-card .card-content {
         display: flex;
         background-color: white;
       }
 
       paper-card.device-card .device-image {
-        width: 300px;
+        width: 252px;
         overflow: hidden;
       }
 
       paper-card.device-card .device-image img {
-        max-width: 80%;
-        padding: 3%;
+        width: 208px;
+        margin-top: 3px;
       }
 
       paper-card.device-card .device-info-column {
-        margin-top: 5px;
+        margin-top: 10px;
         margin-right: 5px;
-        min-width: 230px;
+        min-width: 190px;
       }
 
       paper-card.device-card .device-info-column ul {
-        margin-top: 5px;
         -webkit-margin-before: 0;
         -webkit-margin-start: 0;
+        -webkit-padding-start: 0;
+        margin-left: 25px;
+      }
+
+      paper-card.device-card .device-info-label {
+        margin-left: -25px;
+        font-weight: bold;
       }
 
       paper-card.device-card .device-info-column ul li {
@@ -63,13 +65,12 @@
         color: #333;
       }
 
-      paper-card.device-card span.device-data-value {
-        margin-left: 5px;
+      paper-card.device-card ul li b {
+        margin-right: 5px;
       }
 
       paper-card.device-card .device-status-indicator {
-        margin-top: 25px;
-        margin-left: -10px;
+        margin-left: -25px;
         font-size: 120%;
       }
 
@@ -94,7 +95,7 @@
       }
     </style>
 
-    <paper-card heading="[[_cardLabel()]]" class="device-card">
+    <paper-card class="device-card">
       <div class="card-content">
         <div class="device-image-column">
           <div class="device-image">
@@ -103,6 +104,11 @@
         </div><!-- end div.device-image-column -->
 
         <div class="device-info-column">
+          <template is="dom-if" if="[[label]]">
+            <div class="device-info-label">
+              <span class="device-label">[[label]]</span>
+            </div><!-- end div.device-info-label -->
+          </template>
           <div class="device-status-indicator">
             <template is="dom-if" if="[[online]]">
               <span class="device-status-label device-status-label-online">Online</span>
@@ -112,8 +118,7 @@
             </template>
           </div><!-- end div.device-status-indicator -->
           <ul>
-            <li><b>Name:</b><span class="device-data-value">[[name]]</span></li>
-            <li><b>Type:</b><span class="device-data-value">[[_labelFormat(type)]]</span></li>
+            <li><span class="device-data-value">[[name]]</span></li>
             <li><b>Software:</b><span class="device-data-value">v[[softwareVersion]]</span></li>
             <li><b>Hardware:</b><span class="device-data-value">[[hardwareVersion]]</span></li>
           </ul>
@@ -237,13 +242,6 @@
         if (value !== undefined && value !== null)
           return value.charAt(0).toUpperCase() + value.substr(1).toLowerCase();
         return value;
-      },
-
-      /**
-       * Render default device `label` if we don't have an explicit one.
-       */
-      _cardLabel: function() {
-        return this.label || this.name;
       }
     });
   </script>
