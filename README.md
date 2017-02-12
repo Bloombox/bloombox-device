@@ -1,4 +1,6 @@
 
-##&lt;bloombox-device&gt;  [![CircleCI](https://circleci.com/gh/Bloombox/bloombox-device.svg?style=svg&circle-token=096e9375b0913e6611488c7e751faff9de36bf09)](https://circleci.com/gh/Bloombox/bloombox-device)
+##&lt;bloombox-device&gt;  [![Build Status](https://buildbot.hq.mm-corp.systems/jenkins/buildStatus/icon?job=Bloombox/elements/bloombox-device)](https://buildbot.hq.mm-corp.systems/jenkins/job/Bloombox/elements/bloombox-device)
+
+[![Code Climate](https://codeclimate.com/repos/58a0dab0373ad55987000001/badges/7e46ffd094bea7bb8e4a/gpa.svg)](https://codeclimate.com/repos/58a0dab0373ad55987000001/feed) [![Issue Count](https://codeclimate.com/repos/58a0dab0373ad55987000001/badges/7e46ffd094bea7bb8e4a/issue_count.svg)](https://codeclimate.com/repos/58a0dab0373ad55987000001/feed)
 
 The `bloombox-device` element shows current Bloombox device status.
