@@ -1,5 +1,6 @@
 {
   "name": "bloombox-device",
+  "version": "0.0.1",
   "description": "Shows current Bloombox device status",
   "main": "bloombox-device.html",
   "dependencies": {
